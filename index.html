@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Eventos en Línea</title>
+    <link rel="stylesheet" href="./assets/styles.css">
+    <!-- Import Vue.js -->
+    <script src="https://unpkg.com/vue@3.0.5/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/axios@0.2.1/dist/axios.min.js"></script>
+</head>
+<body>
+  <div class="top-bar">
+    <h1 class="site-title">Eventos en Línea</h1>
+  </div>
+  <div id="app">
+    <div class="container">
+      <div class="left">
+        <h1>{{title.toUpperCase()}}</h1>
+        <p v-if="tickets > 15">A la venta ahora!.</p>
+        <p v-else-if="tickets < 15 && tickets > 0">Los tickets se están agotando!</p>
+        <p v-else>Lo siento, estamos agotados!</p>
+        <ul>
+          <li v-for="detail in details" :key="detail">{{detail}}</li>
+        </ul>
+        <ul class="ticketTypes">
+          <li class="ticketSelector"
+              @mouseover="updateImage(type.id)"
+              v-for="type in ticketTypes">
+            {{type.name}}
+          </li>
+        </ul>
+        <div>
+          <h2>Tipos de boletos</h2>
+          <h3 v-if="error">Lo sentimos, estamos teniendo problemas obteniendo los tipos de tickets. Trate más tarde.</h3>
+          <ticket-details
+            v-for="type in ticketTypes"
+            :name="type.name"
+            :description="type.description"
+            :tickets="type.tickets"
+            @buy-tickets="buyTickets"
+          />
+        </div>
+      </div>
+      <div class="right">
+        <img class="base-class" :class="[{'sold-out': soldOut}, {hidden: hidden}]" :src="image"/>   
+      </div>
+    </div>
+    <div class="cart">Tickets {{cart}}</div>
+  </div>
+  <!-- Import JS -->
+  <script src="./main.js"></script>
+  <script src="./components/Ticket-Details.js"></script>
+  <script>
+    const mountedApp = app.mount("#app")
+  </script>
+</body>
+</html>
